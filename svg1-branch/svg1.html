@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!-- 上帝保佑，
+	 少点bug，
+	 有也请让我一眼看出。 -->
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>svg1</title>
+	<link rel="stylesheet" type="text/css" href="svg1.css">
+	<script type="text/javascript" src="jquery-3.1.0.min.js"></script>
+	<!-- <script type="text/javascript" src="svg1.js"></script> -->
+	<script src="Snap.svg/dist/snap.svg.js"></script>
+</head>
+<body>
+<div class="container">
+	<article>
+		<div id="Face">
+			<h2>脸部设置</h2>
+			<form>
+
+				<label>脸部宽度</label>
+				<input type="range" id="faceSet" min="0.9" max="1.1" step="0.005" value="1">
+			</form>
+		</div>
+		<div id="eyeBrowdiv">
+			<h2>眉毛设置</h2>
+			<form>
+				<label>眉毛角度</label>
+				<input type="range" id="leftEyeBrowSet" min="-90" max="90" step="1"
+				value="1">
+			</form>
+		</div>
+		<div id="eye">
+			<h2>眼睛设置</h2>
+			<form>
+				<label>眼睛大小</label>
+				<input type="range" id="eyeSet" min="0.75" max="1.25" step="0.005" value="1">
+			</form>
+		</div>
+		<div id="nosediv">
+			<h2>鼻子设置</h2>
+			<form>
+				<label>鼻子大小</label>
+				<input type="range" id="noseSet" min="0.75" max="1.25" step="0.005" value="1">
+			</form>
+		</div>
+		<div id="mouthdiv">
+			<h2>嘴巴设置</h2>
+			<form>
+				<label>嘴巴角度</label>
+				<input type="range" id="mouthSet" min="0.38" max="1.10" step="0.005" value="1">
+			</form>
+		</div>
+
+	</article>
+	<aside>
+		<table>
+			<tr>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>					
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+				<td>
+					<div class="append">
+						<iframe class="board" src="boy_new.svg" frameborder="0" scrolling="NO"></iframe>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</aside>
+</div>
+
+</body>
+<script type="text/javascript">
+	window.addEventListener("load",findSVGElements,false);
+	//获取整个svg
+	function findSVGElements(){
+			var current;
+			var divList=document.getElementsByClassName("append");
+			//Slider初始化
+			var eyeSetting=document.getElementById("eyeSet");
+			var faceSetting=document.getElementById("faceSet");
+			var mouthSetting=document.getElementById("mouthSet");
+			var noseSetting=document.getElementById("noseSet");
+			var leftEyeBrowSetting=document.getElementById("leftEyeBrowSet");
+
+			var eyeLastValue=1;
+			var noseLastValue=1;
+			var faceLastValue=1;
+			var leftEyeBrowLastValue=0;
+
+			var divArray=new Array(2);
+			for(i=0;i<divList.length;i++){
+				divArray[i]=$(divList[i]).children()[0].contentDocument;
+			}
+
+			for(var j=0;j<divList.length;j++){
+				(function(el){
+					divList[el].onclick=function(){
+						clear();//执行前先检查所有类名为append的div,如果有select选择器,则删除
+						$(this).addClass("select");//再为当前类添加选择器
+						current=divArray[el];
+						lala(current);
+					};
+				})(j);
+			}
+
+		//给selected添加边框以表示选中
+		function clear(){
+			$(".append").each(function(){
+				if($(this).hasClass("select")){
+					$(this).removeClass("select");
+				}
+			});
+		}
+
+		var lala=function updateHandle(elem){
+			//获取mouth的值
+			var mouthValue=elem.getElementById("mouth").getAttribute("d");
+			var mouthValueArr=mouthValue.split(" ");
+			mouthSetting.value=mouthValueArr[5]/150;
+//			console.log(elem.getElementById("leftEyeBrow").getBBox());
+			//获取nose的值
+			var noseValue=Snap(current.getElementById("nose"));
+			var noseMatrix=noseValue.transform().globalMatrix;
+			noseSetting.value=noseMatrix.a/0.43299999833106995;
+			//获取eye的值
+			var eyeValue=Snap(current.getElementById("rightEye"));
+			var eyeMatrix=eyeValue.transform().globalMatrix;
+			eyeSetting.value=eyeMatrix.a/0.06999999284744263;
+			//获取脸宽的值
+			var faceValue=Snap(current.getElementById("whileFace"));
+			var faceMatrix=faceValue.transform().globalMatrix;
+			faceSetting.value=faceMatrix.a/0.44600000977516174;
+		};
+
+		function scaleChange(widget,matrixPara,svgName,Cx,Cy,lastValue){
+			matrixPara.scale(widget.value/lastValue,widget.value/lastValue,Cx,Cy);
+			svgName.transform(matrixPara);
+			}
+
+		function init(){
+			//眼睛
+			eyeSetting.addEventListener("change",function(){
+				//scale这个方法是根据上一次的值缩放的，而我的需求是根据1来缩放
+						//眼睛值初始化
+				if (!current) {
+					return;
+				}
+				var svgRightEye=Snap(current.getElementById("rightEye"));
+				var svgLeftEye=Snap(current.getElementById("leftEye"));
+				var r=svgRightEye.transform().globalMatrix;
+				var l=svgLeftEye.transform().globalMatrix;
+				var leftEyeCx=60.16115;
+				var leftEyeCy=299.31009;
+				var rightEyeCx=-100.81381;
+				var rightEyeCy=299.31009;
+				scaleChange(this,r,svgRightEye,rightEyeCx,rightEyeCy,eyeLastValue);
+				scaleChange(this,l,svgLeftEye,leftEyeCx,leftEyeCy,eyeLastValue);
+				eyeLastValue=eyeSetting.value;
+			});
+			
+			noseSetting.addEventListener("change",function(){
+				if (!current) {
+					return;
+				}
+
+				var svgNose=Snap(current.getElementById("nose"));
+				var nose=svgNose.transform().globalMatrix;
+				var noseCx=325.45611;
+				var noseCy=299.81381;
+				scaleChange(this,nose,svgNose,noseCx,noseCy,noseLastValue);
+				noseLastValue=noseSetting.value;
+			});
+
+			mouthSetting.addEventListener("change",function(){
+				//嘴巴调整
+				if(!current){return;}
+				var svgMouth=current.getElementById("mouth");
+				svgMouth.setAttribute("d","M 40 115 Q 60 "+this.value*150+" 75 115");
+			});
+
+			leftEyeBrowSetting.addEventListener("change",function(){
+				//眉毛调整
+				if(!current){return;}
+				var svgLeftEyeBrow=Snap(current.getElementById("leftEyeBrow"));
+				var leftEyeBrow=svgLeftEyeBrow.transform().globalMatrix;
+				/*var leftEyeBrowCx=current.getElementById("leftEyeBrow").getBBox().x;
+				var leftEyeBrowCy=current.getElementById("leftEyeBrow").getBBox().y;*/
+				leftEyeBrow.rotate(0);
+				svgLeftEyeBrow.transform(leftEyeBrow);
+//				leftEyeBrowLastValue=leftEyeBrowSetting.value;
+			});
+
+			faceSetting.addEventListener("change",function(){
+				if(!current){return;}
+				//脸部轮廓初始化
+				var svgFace=Snap(current.getElementById("whileFace"));
+				var face=svgFace.transform().globalMatrix;
+				var faceCx=325.45611;
+				var faceCy=299.81381;
+
+//				console.log(face);
+				scaleChange(this,face,svgFace,faceCx,faceCy,faceLastValue);
+				faceLastValue=this.value;
+			});	
+		}
+	init();
+}
+</script>
+</html>
