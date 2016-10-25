@@ -22,14 +22,14 @@
 				<input type="range" id="faceSet" min="0.9" max="1.1" step="0.005" value="1">
 			</form>
 		</div>
-		<div id="eyeBrowdiv">
-			<h2>眉毛设置</h2>
-			<form>
-				<label>眉毛角度</label>
-				<input type="range" id="leftEyeBrowSet" min="-90" max="90" step="1"
-				value="1">
-			</form>
-		</div>
+<!-- 		<div id="eyeBrowdiv">
+	<h2>眉毛设置</h2>
+	<form>
+		<label>眉毛角度</label>
+		<input type="range" id="leftEyeBrowSet" min="-90" max="90" step="1"
+		value="1">
+	</form>
+</div> -->
 		<div id="eye">
 			<h2>眼睛设置</h2>
 			<form>
@@ -112,7 +112,7 @@
 
 </body>
 <script type="text/javascript">
-	window.addEventListener("load",findSVGElements,false);
+window.addEventListener("load",findSVGElements,false);
 	//获取整个svg
 	function findSVGElements(){
 			var current;
@@ -122,14 +122,15 @@
 			var faceSetting=document.getElementById("faceSet");
 			var mouthSetting=document.getElementById("mouthSet");
 			var noseSetting=document.getElementById("noseSet");
-			var leftEyeBrowSetting=document.getElementById("leftEyeBrowSet");
+			// var leftEyeBrowSetting=document.getElementById("leftEyeBrowSet");
 
 			var eyeLastValue=1;
 			var noseLastValue=1;
 			var faceLastValue=1;
-			var leftEyeBrowLastValue=0;
+			// var leftEyeBrowLastValue=0;
 
 			var divArray=new Array(2);
+
 			for(i=0;i<divList.length;i++){
 				divArray[i]=$(divList[i]).children()[0].contentDocument;
 			}
@@ -160,18 +161,24 @@
 			var mouthValueArr=mouthValue.split(" ");
 			mouthSetting.value=mouthValueArr[5]/150;
 //			console.log(elem.getElementById("leftEyeBrow").getBBox());
+
 			//获取nose的值
 			var noseValue=Snap(current.getElementById("nose"));
 			var noseMatrix=noseValue.transform().globalMatrix;
 			noseSetting.value=noseMatrix.a/0.43299999833106995;
+			noseLastValue=noseSetting.value;
+
 			//获取eye的值
 			var eyeValue=Snap(current.getElementById("rightEye"));
 			var eyeMatrix=eyeValue.transform().globalMatrix;
 			eyeSetting.value=eyeMatrix.a/0.06999999284744263;
+			eyeLastValue=eyeSetting.value;
+
 			//获取脸宽的值
 			var faceValue=Snap(current.getElementById("whileFace"));
 			var faceMatrix=faceValue.transform().globalMatrix;
 			faceSetting.value=faceMatrix.a/0.44600000977516174;
+			faceLastValue=faceSetting.value;
 		};
 
 		function scaleChange(widget,matrixPara,svgName,Cx,Cy,lastValue){
@@ -220,17 +227,17 @@
 				svgMouth.setAttribute("d","M 40 115 Q 60 "+this.value*150+" 75 115");
 			});
 
-			leftEyeBrowSetting.addEventListener("change",function(){
+/*			leftEyeBrowSetting.addEventListener("change",function(){
 				//眉毛调整
 				if(!current){return;}
 				var svgLeftEyeBrow=Snap(current.getElementById("leftEyeBrow"));
 				var leftEyeBrow=svgLeftEyeBrow.transform().globalMatrix;
-				/*var leftEyeBrowCx=current.getElementById("leftEyeBrow").getBBox().x;
-				var leftEyeBrowCy=current.getElementById("leftEyeBrow").getBBox().y;*/
+				var leftEyeBrowCx=current.getElementById("leftEyeBrow").getBBox().x;
+				var leftEyeBrowCy=current.getElementById("leftEyeBrow").getBBox().y;
 				leftEyeBrow.rotate(0);
 				svgLeftEyeBrow.transform(leftEyeBrow);
 //				leftEyeBrowLastValue=leftEyeBrowSetting.value;
-			});
+			});*/
 
 			faceSetting.addEventListener("change",function(){
 				if(!current){return;}
